@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <div id="nav-placeholder"></div>
+    
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="display-4 text-center mb-4">Grading Interface</h1>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Assignment: Sample Assignment</h5>
+            </div>
+            <div class="card-body">
+              <form>
+                <div class="mb-3">
+                  <label for="studentName" class="form-label">Student Name</label>
+                  <input type="text" class="form-control" id="studentName" placeholder="Enter student name">
+                </div>
+                
+                <div class="mb-3">
+                  <label for="assignmentScore" class="form-label">Score (0-100)</label>
+                  <input type="number" class="form-control" id="assignmentScore" min="0" max="100" placeholder="Enter score">
+                </div>
+                
+                <div class="mb-3">
+                  <label for="feedback" class="form-label">Feedback</label>
+                  <textarea class="form-control" id="feedback" rows="4" placeholder="Enter detailed feedback..."></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Rubric Criteria</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="criteria1">
+                    <label class="form-check-label" for="criteria1">
+                      Understanding of concepts (25 points)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="criteria2">
+                    <label class="form-check-label" for="criteria2">
+                      Application of knowledge (25 points)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="criteria3">
+                    <label class="form-check-label" for="criteria3">
+                      Quality of work (25 points)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="criteria4">
+                    <label class="form-check-label" for="criteria4">
+                      Timeliness (25 points)
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-lg">Submit Grade</button>
+                  <button type="button" class="btn btn-outline-secondary">Save Draft</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

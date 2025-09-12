@@ -1,0 +1,5 @@
+*.zip
+tmp/
+node_modules/
+dist/
+.vscode/
