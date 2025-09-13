@@ -1,5 +1,20 @@
 /* Storm Grader Custom Styles */
 
+/* Fixed navbar */
+.navbar.sticky-top {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1020 !important;
+  width: 100% !important;
+}
+
+/* Add padding to body to account for fixed navbar */
+body {
+  padding-top: 80px;
+}
+
 .form-label {
   font-weight: bold;
 }

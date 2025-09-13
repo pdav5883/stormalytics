@@ -1,5 +1,8 @@
 # Storm Grader
 
+## TODO
+- Add youtube link
+
 A modern web application for grading and assessment, built with Bootstrap, jQuery, and Webpack.
 
 ## Overview
@@ -26,8 +29,7 @@ This project follows a static site architecture suitable for deployment on AWS S
 
 ## Project Structure
 
-```
-storm-grader/
+stormalytics/
 ├── src/
 │   ├── scripts/
 │   │   ├── shared.js      # Main JavaScript entry point
@@ -58,7 +60,7 @@ storm-grader/
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd storm-grader
+   cd stormalytics
    ```
 
 2. Install dependencies:

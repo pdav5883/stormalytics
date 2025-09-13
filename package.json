@@ -1,7 +1,7 @@
 {
-  "name": "storm-grader",
+  "name": "stormalytics",
   "version": "1.0.0",
-  "description": "Storm Grader - A web application for grading and assessment",
+  "description": "Stormalytics - A rigorous, objective system to judge when to storm",
   "dependencies": {
     "bootstrap": "5.0",
     "jquery": "^3.5.0"

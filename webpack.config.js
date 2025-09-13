@@ -49,10 +49,6 @@ module.exports = {
         {
           from: './src/images',
           to: 'assets'
-        },
-        {
-          from: './src/test.json',
-          to: 'test.json'
         }
       ]
     })
