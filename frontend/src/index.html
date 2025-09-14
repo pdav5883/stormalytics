@@ -23,11 +23,11 @@
         <div class="row">
           <div class="col-12 text-center">
             <div class="btn-group" role="group" aria-label="Sport selection">
-              <input type="radio" class="btn-check" name="sport-toggle" id="basketball" autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="basketball">Basketball</label>
-              
-              <input type="radio" class="btn-check" name="sport-toggle" id="football" autocomplete="off">
+              <input type="radio" class="btn-check" name="sport-toggle" id="football" autocomplete="off" checked>
               <label class="btn btn-outline-primary" for="football">Football</label>
+
+              <input type="radio" class="btn-check" name="sport-toggle" id="basketball" autocomplete="off">
+              <label class="btn btn-outline-primary" for="basketball">Basketball</label>
             </div>
           </div>
         </div>
@@ -80,7 +80,10 @@
             <div class="row text-center mb-3">
               <div class="col-6">
                 <small class="text-muted">Total Score</small>
-                <div class="h4 text-dark fw-bold" id="modal-total-score"></div>
+                <div class="h4 text-dark fw-bold">
+                  <span id="modal-total-score"></span>
+                  <small class="text-muted" style="font-size: 0.7em;">/ 2.5</small>
+                </div>
               </div>
               <div class="col-6">
                 <small class="text-muted">Storm Verdict</small>
@@ -95,7 +98,8 @@
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="headingUpset">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUpset" aria-expanded="false" aria-controls="collapseUpset">
-                        Upset
+                        <span>Upset</span>
+                        <span class="mx-3 badge bg-secondary" id="accordion-upset-score"></span>
                       </button>
                     </h2>
                     <div id="collapseUpset" class="accordion-collapse collapse" aria-labelledby="headingUpset" data-bs-parent="#analysisAccordion">
@@ -107,7 +111,8 @@
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="headingImpact">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImpact" aria-expanded="false" aria-controls="collapseImpact">
-                        Impact
+                        <span>Impact</span>
+                        <span class="mx-3 badge bg-secondary" id="accordion-impact-score"></span>
                       </button>
                     </h2>
                     <div id="collapseImpact" class="accordion-collapse collapse" aria-labelledby="headingImpact" data-bs-parent="#analysisAccordion">
@@ -119,7 +124,8 @@
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="headingExcitement">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExcitement" aria-expanded="false" aria-controls="collapseExcitement">
-                        Excitement
+                        <span>Excitement</span>
+                        <span class="mx-3 badge bg-secondary" id="accordion-excitement-score"></span>
                       </button>
                     </h2>
                     <div id="collapseExcitement" class="accordion-collapse collapse" aria-labelledby="headingExcitement" data-bs-parent="#analysisAccordion">

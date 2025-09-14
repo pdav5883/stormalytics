@@ -1,0 +1,17 @@
+[
+  "AcmSSLCertificateId=fc984629-2984-4666-8901-01ad4f48fc7f",
+  "HostedZoneId=Z0361942AJYCRL79BJEU",
+  "DeployedRootURL=storm.bearloves.rocks",
+  "LambdaReadWritePermissionName=stormalytics-read-write",
+  "LambdaReadPermissionName=stormalytics-read",
+  "LambdaUserAuthPermissionName=stormalytics-user-auth",
+  "PublicBucketName=stormalytics-public",
+  "PrivateBucketName=stormalytics-private",
+  "LambdaAddMatchupName=StormalyticsAddMatchup",
+  "LambdaGetMatchupsName=StormalyticsGetMatchups",
+  "LambdaUserAuthName=StormalyticsUserAuth",
+  "ApiName=stormalytics",
+  "CognitoUserPoolId=us-east-1_XXXXXXXXX",
+  "CognitoUserPoolClientId=XXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "CognitoAdminGroupName=blr-admin"
+]

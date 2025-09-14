@@ -1,0 +1,501 @@
+Parameters:
+  AcmSSLCertificateId:
+    Type: String
+  HostedZoneId:
+    Type: String
+  DeployedRootURL:
+    Type: String
+  LambdaReadWritePermissionName:
+    Type: String
+  LambdaReadPermissionName:
+    Type: String
+  LambdaUserAuthPermissionName:
+    Type: String
+  PublicBucketName:
+    Type: String
+  PrivateBucketName:
+    Type: String
+  LambdaAddMatchupName:
+    Type: String
+  LambdaGetMatchupsName:
+    Type: String
+  LambdaUserAuthName:
+    Type: String
+  ApiName:
+    Type: String
+  CognitoUserPoolId:
+    Type: String
+  CognitoUserPoolClientId:
+    Type: String
+Outputs:
+  CloudFrontDistroId:
+    Value: !Ref CloudFrontDistroStorm
+  ApiId:
+    Value: !Ref ApiGatewayStorm
+  UserPoolId:
+    Value: !Ref CognitoUserPoolId
+  UserPoolClientId:
+    Value: !Ref CognitoUserPoolClientId
+Resources:
+############################
+##### Lambda 
+############################
+  LambdaStormAddMatchup:
+    Type: "AWS::Lambda::Function"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !Ref LambdaAddMatchupName
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+                # upload code via lambda deploy script
+                return False
+      Role: !GetAtt RoleStormReadWrite.Arn 
+      FileSystemConfigs: []
+      Runtime: "python3.12"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: !Ref LogStormLambdaAddMatchup
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LambdaStormGetMatchups:
+    Type: "AWS::Lambda::Function"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !Ref LambdaGetMatchupsName
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+                # upload code via lambda deploy script
+                return False
+      Role: !GetAtt RoleStormRead.Arn 
+      FileSystemConfigs: []
+      Runtime: "python3.12"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: !Ref LogStormLambdaGetMatchups
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LambdaStormUserAuth:
+    Type: "AWS::Lambda::Function"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !Ref LambdaUserAuthName 
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+                # upload code via lambda deploy script
+                return False
+      Role: !GetAtt RoleStormUserAuth.Arn 
+      FileSystemConfigs: []
+      Runtime: "python3.12"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: !Ref LogStormLambdaUserAuth
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+############################
+#### IAM
+############################
+  RoleStormReadWrite:
+    Type: "AWS::IAM::Role"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      - !GetAtt PolicyStormReadWrite.PolicyArn
+      MaxSessionDuration: 3600
+      RoleName: !Sub "role-lambda-${LambdaReadWritePermissionName}"
+      Description: ""
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  RoleStormRead:
+    Type: "AWS::IAM::Role"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      - !GetAtt PolicyStormRead.PolicyArn
+      MaxSessionDuration: 3600
+      RoleName: !Sub "role-lambda-${LambdaReadPermissionName}"
+      Description: ""
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  RoleStormUserAuth:
+    Type: "AWS::IAM::Role"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      - !GetAtt PolicyStormUserAuth.PolicyArn
+      MaxSessionDuration: 3600
+      RoleName: !Sub "role-lambda-${LambdaUserAuthPermissionName}"
+      Description: ""
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  PolicyStormReadWrite:
+    Type: "AWS::IAM::ManagedPolicy"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ManagedPolicyName: !Sub "policy-lambda-${LambdaReadWritePermissionName}"
+      Path: "/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - !GetAtt S3StormPrivate.Arn
+          - !Sub "${S3StormPrivate.Arn}/*"
+          Action:
+          - "s3:PutObject"
+          - "s3:GetObject"
+          - "s3:DeleteObject"
+          - "s3:ListBucket"
+          Effect: "Allow"
+          Sid: "VisualEditor0"
+  PolicyStormRead:
+    Type: "AWS::IAM::ManagedPolicy"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ManagedPolicyName: !Sub "policy-lambda-${LambdaReadPermissionName}"
+      Path: "/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - !GetAtt S3StormPrivate.Arn
+          - !Sub "${S3StormPrivate.Arn}/*"
+          - !GetAtt S3StormPublic.Arn
+          - !Sub "${S3StormPublic.Arn}/*"
+          Action:
+          - "s3:GetObject"
+          - "s3:ListBucket"
+          Effect: "Allow"
+          Sid: "VisualEditor0"
+  PolicyStormUserAuth:
+    Type: "AWS::IAM::ManagedPolicy"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ManagedPolicyName: !Sub "policy-lambda-${LambdaUserAuthPermissionName}"
+      Path: "/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Resource: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*"
+          Action:
+          - "cognito-idp:AdminGetUser"
+          - "cognito-idp:AdminUpdateUserAttributes"
+          - "cognito-idp:AdminListGroupsForUser"
+          - "cognito-idp:ListUsers"
+          - "cognito-idp:GetUser"
+          Effect: "Allow"
+          Sid: "VisualEditor0"
+############################
+#### S3
+############################
+  S3StormPublic:
+    Type: "AWS::S3::Bucket"
+    UpdateReplacePolicy: "Retain"
+    DeletionPolicy: "Delete"
+    Properties:
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        BlockPublicAcls: true
+      BucketName: !Ref PublicBucketName 
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: "BucketOwnerEnforced" 
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: false
+          ServerSideEncryptionByDefault:
+            SSEAlgorithm: "AES256"
+  S3StormPrivate:
+    Type: "AWS::S3::Bucket"
+    UpdateReplacePolicy: "Retain"
+    DeletionPolicy: "Delete"
+    Properties:
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        BlockPublicAcls: true
+      BucketName: !Ref PrivateBucketName 
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: "BucketOwnerEnforced"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: false
+          ServerSideEncryptionByDefault:
+            SSEAlgorithm: "AES256"
+############################
+#### API
+############################
+  ApiGatewayStorm:
+    Type: "AWS::ApiGatewayV2::Api"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Name: !Ref ApiName
+      RouteSelectionExpression: "$request.method $request.path"
+      DisableExecuteApiEndpoint: false
+      CorsConfiguration:
+        MaxAge: 1
+        AllowOrigins:
+        - "*"
+        AllowCredentials: false
+        ExposeHeaders: []
+        AllowMethods:
+        - "*"
+        AllowHeaders:
+        - "*"
+      ProtocolType: "HTTP"
+      Tags: {}
+  ApiStageStorm:
+    Type: "AWS::ApiGatewayV2::Stage"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      StageName: "$default"
+      AutoDeploy: true
+  ApiRouteStormAddMatchup:
+    Type: "AWS::ApiGatewayV2::Route"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      RouteKey: !Sub "POST /matchups"
+      Target: !Join ["/", ["integrations", !Ref ApiIntegrationStormAddMatchup]]
+  ApiIntegrationStormAddMatchup:
+    Type: "AWS::ApiGatewayV2::Integration"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      IntegrationUri: !Sub  "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaStormAddMatchup.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+  ApiTriggerPermissionStormAddMatchup:
+    Type: "AWS::Lambda::Permission"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !GetAtt LambdaStormAddMatchup.Arn
+      Action: "lambda:InvokeFunction"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/*/*/matchups"
+      Principal: "apigateway.amazonaws.com"
+  ApiRouteStormGetMatchups:
+    Type: "AWS::ApiGatewayV2::Route"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      RouteKey: !Sub "GET /matchups"
+      Target: !Join ["/", ["integrations", !Ref ApiIntegrationStormGetMatchups]]
+  ApiIntegrationStormGetMatchups:
+    Type: "AWS::ApiGatewayV2::Integration"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      IntegrationUri: !Sub  "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaStormGetMatchups.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+  ApiTriggerPermissionStormGetMatchups:
+    Type: "AWS::Lambda::Permission"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !GetAtt LambdaStormGetMatchups.Arn
+      Action: "lambda:InvokeFunction"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/*/*/matchups"
+      Principal: "apigateway.amazonaws.com"
+############################
+#### CloudFront 
+############################
+  CloudFrontDistroStorm:
+    Type: "AWS::CloudFront::Distribution"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: "index.html"
+        Origins:
+          #- OriginAccessControlId: !Ref CloudFrontOACStorm
+        - OriginAccessControlId: "EWO8FEYV4CJHK" # TODO 
+          DomainName: !GetAtt S3StormPublic.RegionalDomainName
+          S3OriginConfig:
+            OriginAccessIdentity: ""
+          Id: !GetAtt S3StormPublic.RegionalDomainName
+        ViewerCertificate:
+          MinimumProtocolVersion: "TLSv1.2_2021"
+          SslSupportMethod: "sni-only"
+          AcmCertificateArn: !Sub "arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${AcmSSLCertificateId}"
+        DefaultCacheBehavior:
+          Compress: true
+          AllowedMethods:
+          - "HEAD"
+          - "GET"
+          CachedMethods:
+          - "HEAD"
+          - "GET"
+          TargetOriginId: !GetAtt S3StormPublic.RegionalDomainName 
+          ViewerProtocolPolicy: "redirect-to-https"
+          CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
+        Staging: false
+        Enabled: true
+        Aliases:
+        - !Ref DeployedRootURL 
+        IPV6Enabled: true
+        HttpVersion: "http2"
+        #  CloudFrontOACStorm:
+        #Type: "AWS::CloudFront::OriginAccessControl"
+        #UpdateReplacePolicy: "Delete"
+        #DeletionPolicy: "Delete"
+        #Properties:
+        #OriginAccessControlConfig:
+        #SigningBehavior: "always"
+        #Description: ""
+        #SigningProtocol: "sigv4"
+        #OriginAccessControlOriginType: "s3"
+        #Name: !GetAtt S3StormPublic.RegionalDomainName
+  S3BucketPolicyStorm:
+    Type: "AWS::S3::BucketPolicy"
+    UpdateReplacePolicy: "Retain"
+    DeletionPolicy: "Delete"
+    Properties:
+      Bucket: !Ref S3StormPublic
+      PolicyDocument:
+        Version: "2008-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistroStorm.Id}" 
+          Resource: !Sub "${S3StormPublic.Arn}/*"
+          Action: "s3:GetObject"
+          Effect: "Allow"
+          Principal:
+            Service: "cloudfront.amazonaws.com"
+          Sid: "AllowCloudFrontServicePrincipal"
+        Id: "PolicyForCloudFrontPrivateContent"
+############################
+#### Route53 
+############################
+  # Route53ARecordStorm:
+  #   Type: "AWS::Route53::RecordSet"
+  #   UpdateReplacePolicy: "Delete"
+  #   DeletionPolicy: "Delete"
+  #   Properties:
+  #     Type: "A"
+  #     Name: !Ref DeployedRootURL
+  #     HostedZoneId: !Ref HostedZoneId
+  #     AliasTarget:
+  #       DNSName: !GetAtt CloudFrontDistroStorm.DomainName
+  #       HostedZoneId: !Ref HostedZoneId
+  # Route53AAAARecordStorm:
+  #   Type: "AWS::Route53::RecordSet"
+  #   UpdateReplacePolicy: "Delete"
+  #   DeletionPolicy: "Delete"
+  #   Properties:
+  #     Type: "AAAA"
+  #     Name: !Ref DeployedRootURL 
+  #     HostedZoneId: !Ref HostedZoneId
+  #     AliasTarget:
+  #       DNSName: !GetAtt CloudFrontDistroStorm.DomainName
+  #       HostedZoneId: !Ref HostedZoneId
+############################
+#### Logs 
+############################
+  LogStormLambdaAddMatchup:
+    Type: "AWS::Logs::LogGroup"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaAddMatchupName}"
+      RetentionInDays: 7
+  LogStormLambdaGetMatchups:
+    Type: "AWS::Logs::LogGroup"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaGetMatchupsName}"
+      RetentionInDays: 7
+  LogStormLambdaUserAuth:
+    Type: "AWS::Logs::LogGroup"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaUserAuthName}"
+      RetentionInDays: 7
+

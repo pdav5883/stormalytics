@@ -1,6 +1,8 @@
 // Test data for development
-export const basketballMatchups = [
+export const matchups = [
+  // Basketball matchups
   {
+    "sport": "basketball",
     "winner": "UNC",
     "loser": "Duke",
     "winner_rank": "",
@@ -15,6 +17,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Duke-UNC rivalry is legendary. The intensity, the history, and the pure hatred between these programs makes every game must-watch TV."
   },
   {
+    "sport": "basketball",
     "winner": "Kentucky",
     "loser": "Louisville",
     "winner_rank": "8",
@@ -29,6 +32,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The rivalry still brings energy, but without the upset factor, it's just another rivalry game."
   },
   {
+    "sport": "basketball",
     "winner": "Ohio State",
     "loser": "Michigan",
     "winner_rank": "12",
@@ -43,6 +47,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Ohio State-Michigan rivalry transcends sports. The intensity and hatred between these programs is unmatched."
   },
   {
+    "sport": "basketball",
     "winner": "Alabama",
     "loser": "Auburn",
     "winner_rank": "3",
@@ -57,6 +62,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Alabama-Auburn rivalry is intense in every sport. The basketball version carries the same passion and energy."
   },
   {
+    "sport": "basketball",
     "winner": "Gonzaga",
     "loser": "Saint Mary's",
     "winner_rank": "7",
@@ -71,6 +77,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Gonzaga-Saint Mary's rivalry has grown in recent years, creating more excitement around these matchups."
   },
   {
+    "sport": "basketball",
     "winner": "Georgetown",
     "loser": "Villanova",
     "winner_rank": "",
@@ -85,6 +92,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Georgetown-Villanova rivalry has historical significance, though it's not as intense as it once was."
   },
   {
+    "sport": "basketball",
     "winner": "Kansas",
     "loser": "Kansas State",
     "winner_rank": "4",
@@ -99,6 +107,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The Kansas-Kansas State rivalry is intense and always brings out passionate fans on both sides."
   },
   {
+    "sport": "basketball",
     "winner": "UCLA",
     "loser": "USC",
     "winner_rank": "9",
@@ -113,6 +122,7 @@ export const basketballMatchups = [
     "excitement_rationale": "The UCLA-USC rivalry is legendary across all sports. The basketball version carries the same intensity and passion."
   },
   {
+    "sport": "basketball",
     "winner": "Texas",
     "loser": "Texas A&M",
     "winner_rank": "11",
@@ -125,11 +135,10 @@ export const basketballMatchups = [
     "upset_rationale": "Texas was ranked #11 while Texas A&M was unranked, so this was expected rather than an upset.",
     "impact_rationale": "Important for conference standings, but Texas A&M's unranked status limits the national impact.",
     "excitement_rationale": "The Texas-Texas A&M rivalry is intense, though the basketball version doesn't quite match the football intensity."
-  }
-];
-
-export const footballMatchups = [
+  },
+  // Football matchups
   {
+    "sport": "football",
     "winner": "Auburn",
     "loser": "Alabama",
     "winner_rank": "",
@@ -144,6 +153,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Iron Bowl is already the most intense rivalry in college football. An upset of this magnitude would create pandemonium."
   },
   {
+    "sport": "football",
     "winner": "Michigan",
     "loser": "Ohio State",
     "winner_rank": "1",
@@ -158,6 +168,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Game is the ultimate rivalry in college football. The intensity, hatred, and passion between these programs is unmatched."
   },
   {
+    "sport": "football",
     "winner": "Georgia",
     "loser": "Florida",
     "winner_rank": "4",
@@ -172,6 +183,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Georgia-Florida rivalry is legendary, with the neutral site in Jacksonville adding to the unique atmosphere."
   },
   {
+    "sport": "football",
     "winner": "Oklahoma",
     "loser": "Texas",
     "winner_rank": "6",
@@ -186,6 +198,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Red River Showdown is one of college football's greatest rivalries, with the Cotton Bowl atmosphere adding to the intensity."
   },
   {
+    "sport": "football",
     "winner": "Alabama",
     "loser": "LSU",
     "winner_rank": "2",
@@ -200,6 +213,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Alabama-LSU rivalry has grown into one of the SEC's most intense, with both programs consistently competing for championships."
   },
   {
+    "sport": "football",
     "winner": "Ohio State",
     "loser": "Penn State",
     "winner_rank": "3",
@@ -214,6 +228,7 @@ export const footballMatchups = [
     "excitement_rationale": "The White Out atmosphere in Happy Valley is legendary, making this one of the most exciting games of the season."
   },
   {
+    "sport": "football",
     "winner": "Clemson",
     "loser": "South Carolina",
     "winner_rank": "8",
@@ -228,6 +243,7 @@ export const footballMatchups = [
     "excitement_rationale": "The Clemson-South Carolina rivalry is intense, though Clemson's recent dominance has reduced some of the excitement."
   },
   {
+    "sport": "football",
     "winner": "Washington",
     "loser": "Oregon",
     "winner_rank": "5",
@@ -242,20 +258,23 @@ export const footballMatchups = [
     "excitement_rationale": "The Washington-Oregon rivalry has grown in intensity, with both programs competing for Pac-12 supremacy."
   },
   {
-    "winner": "USC",
-    "loser": "Notre Dame",
-    "winner_rank": "10",
-    "loser_rank": "13",
-    "date": "2025-11-22",
-    "upset_score": 0.8,
-    "impact_score": 1.1,
+    "sport": "football",
+    "winner": "Georgia Tech",
+    "loser": "Clemson",
+    "winner_rank": "12",
+    "loser_rank": "",
+    "date": "2025-09-13",
+    "upset_score": 0.25,
+    "impact_score": 0.75,
     "excitement_score": 1.0,
-    "overall_discussion": "The intersectional rivalry delivered another chapter. USC's victory over Notre Dame was competitive but not spectacular.",
-    "upset_rationale": "Notre Dame was ranked #13 while USC was #10, making this a moderate upset for the Fighting Irish.",
-    "impact_rationale": "Moderate impact on College Football Playoff positioning and national rankings, but not a game-changer.",
-    "excitement_rationale": "The USC-Notre Dame rivalry has historical significance, though it's not as intense as it once was."
+    "overall_discussion": "This one was close, but was missing the key ingredient of a real underdog really upsetting a real favorite.",
+    "upset_rationale": "Yes, Clemson was ranked, but they were only 3 point favorites at kickoff and only 2 spots ahead of Georgia Tech in the FPI. Georgia Tech is a good team who beat a slightly better team.",
+    "impact_rationale": "There is a bit of a rivalry here since the schools are only 100 miles apart and play every year. Clemson has won the last 9 meetings, and really needed a win to convince the world that they're one of the big boys. ",
+    "excitement_rationale": "Georgia Tech was ahead for the whole game, then Clemson tied it up with 3 minutes to go. Tech drove to midfield, drained the clock, sprinted the field goal team on with a running clock, and hit a 55 yarder to win as time expired."
   }
 ];
 
-// Default export for backward compatibility
+// Legacy exports for backward compatibility
+export const basketballMatchups = matchups.filter(matchup => matchup.sport === 'basketball');
+export const footballMatchups = matchups.filter(matchup => matchup.sport === 'football');
 export const testMatchups = basketballMatchups;

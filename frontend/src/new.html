@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <div id="nav-placeholder"></div>
+    
+    <main>
+       <section class="py-5 text-center container">
+         <div class="row py-lg-5">
+           <div class="col-lg-8 col-md-10 mx-auto">
+             <h1 class="fw-light">Add New Matchup</h1>
+             <p class="lead text-muted">Submit a new storm</p>
+             
+           </div>
+         </div>
+       </section>
+
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <form id="matchup-form">
+              <!-- Basic Matchup Information -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="mb-0">Basic Information</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="sport-select" class="form-label">Sport <span class="text-danger">*</span></label>
+                      <select class="form-select" id="sport-select" name="sport" required>
+                        <option value="basketball">Basketball</option>
+                        <option value="football">Football</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
+                      <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="winner" class="form-label">Winner <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="winner" name="winner" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="loser" class="form-label">Loser <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="loser" name="loser" required>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="winner_rank" class="form-label">Winner Rank</label>
+                      <input type="text" class="form-control" id="winner_rank" name="winner_rank" placeholder="e.g., 1, 5, or leave blank">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="loser_rank" class="form-label">Loser Rank</label>
+                      <input type="text" class="form-control" id="loser_rank" name="loser_rank" placeholder="e.g., 1, 5, or leave blank">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scoring -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="mb-0">Scoring</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <label for="upset_score" class="form-label">Upset Score <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="upset_score" name="upset_score" min="0" max="2" step="0.1" required>
+                      <div class="form-text">0.0 - 1.5</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="impact_score" class="form-label">Impact Score <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="impact_score" name="impact_score" min="0" max="2" step="0.1" required>
+                      <div class="form-text">0.0 - 1.5</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="excitement_score" class="form-label">Excitement Score <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="excitement_score" name="excitement_score" min="0" max="2" step="0.1" required>
+                      <div class="form-text">0.0 - 1.5</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rationale -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="mb-0">Rationale</h5>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label for="upset_rationale" class="form-label">Upset Rationale <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="upset_rationale" name="upset_rationale" rows="3" required></textarea>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="impact_rationale" class="form-label">Impact Rationale <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="impact_rationale" name="impact_rationale" rows="3" required></textarea>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="excitement_rationale" class="form-label">Excitement Rationale <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="excitement_rationale" name="excitement_rationale" rows="3" required></textarea>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="overall_discussion" class="form-label">Overall Discussion <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="overall_discussion" name="overall_discussion" rows="4" required></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="text-center mb-5">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                  <span id="submit-text">Submit Matchup</span>
+                  <span id="submit-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                    <span class="visually-hidden">Submitting...</span>
+                  </span>
+                </button>
+              </div>
+            </form>
+
+            <!-- Success/Error Messages -->
+            <div id="alert-container"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </body>
+</html>
