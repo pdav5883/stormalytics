@@ -452,28 +452,28 @@ Resources:
 ############################
 #### Route53 
 ############################
-  # Route53ARecordStorm:
-  #   Type: "AWS::Route53::RecordSet"
-  #   UpdateReplacePolicy: "Delete"
-  #   DeletionPolicy: "Delete"
-  #   Properties:
-  #     Type: "A"
-  #     Name: !Ref DeployedRootURL
-  #     HostedZoneId: !Ref HostedZoneId
-  #     AliasTarget:
-  #       DNSName: !GetAtt CloudFrontDistroStorm.DomainName
-  #       HostedZoneId: !Ref HostedZoneId
-  # Route53AAAARecordStorm:
-  #   Type: "AWS::Route53::RecordSet"
-  #   UpdateReplacePolicy: "Delete"
-  #   DeletionPolicy: "Delete"
-  #   Properties:
-  #     Type: "AAAA"
-  #     Name: !Ref DeployedRootURL 
-  #     HostedZoneId: !Ref HostedZoneId
-  #     AliasTarget:
-  #       DNSName: !GetAtt CloudFrontDistroStorm.DomainName
-  #       HostedZoneId: !Ref HostedZoneId
+  Route53ARecordStorm:
+    Type: "AWS::Route53::RecordSet"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Type: "A"
+      Name: !Ref DeployedRootURL
+      HostedZoneId: !Ref HostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistroStorm.DomainName
+        HostedZoneId: !Ref HostedZoneId
+  Route53AAAARecordStorm:
+    Type: "AWS::Route53::RecordSet"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Type: "AAAA"
+      Name: !Ref DeployedRootURL 
+      HostedZoneId: !Ref HostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistroStorm.DomainName
+        HostedZoneId: !Ref HostedZoneId
 ############################
 #### Logs 
 ############################

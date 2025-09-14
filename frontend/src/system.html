@@ -9,68 +9,166 @@
     <div id="nav-placeholder"></div>
     
     <div class="container mt-4">
-      <div class="row">
-        <div class="col-12">
-          <h1 class="display-4 text-center mb-4">Grading Interface</h1>
-        </div>
-      </div>
-      
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0">Assignment: Sample Assignment</h5>
+        <div class="row">
+          <div class="col-12">
+            <h1 class="display-4 text-center mb-4">The Scoring System</h1>
+            <p class="lead text-center text-muted">Solving the national over-storming problem</p>
+            <div class="text-center mb-4">
+              <a href="/" class="btn btn-primary btn-lg">See the Verdicts</a>
             </div>
-            <div class="card-body">
-              <form>
-                <div class="mb-3">
-                  <label for="studentName" class="form-label">Student Name</label>
-                  <input type="text" class="form-control" id="studentName" placeholder="Enter student name">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">Overview</h4>
+                <p class="card-text">
+                  Stormalytics evaluates a field or court storming along three dimensions. <strong>Upset</strong>: how unexpected was the win? <strong>Impact</strong>: what was the meaning of the win? <strong>Excitement</strong>: how exciting was game, particularly the ending?
+                </p>
+                <p>
+                  Each category gets a score, and if the total score is high enough then the storm is acceptable. Otherwise, the fans need to get back in their seats.
+                </p>
+              </div>
+            </div>
+            
+            <div class="alert alert-info">
+            <h5 class="alert-heading">Storming Threshold</h5>
+            <p class="mb-0">A total score of <strong>2.5 or higher</strong> indicates that a field or court storming is justified.</p>
+            <p class="mb-0 mt-2"><small>Each category is scored from 0.0 to 1.0, with a 0.5 bonus available for exceptional circumstances.</small></p>
+          </div>
+          
+          <!-- Upset Score Category -->
+          <div class="row mb-5">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">Degree of Upset</h4>
+                  <small>Range: 0.0 - 1.5</small>
                 </div>
-                
-                <div class="mb-3">
-                  <label for="assignmentScore" class="form-label">Score (0-100)</label>
-                  <input type="number" class="form-control" id="assignmentScore" min="0" max="100" placeholder="Enter score">
-                </div>
-                
-                <div class="mb-3">
-                  <label for="feedback" class="form-label">Feedback</label>
-                  <textarea class="form-control" id="feedback" rows="4" placeholder="Enter detailed feedback..."></textarea>
-                </div>
-                
-                <div class="mb-3">
-                  <label class="form-label">Rubric Criteria</label>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="criteria1">
-                    <label class="form-check-label" for="criteria1">
-                      Understanding of concepts (25 points)
-                    </label>
+                <div class="card-body">
+                  <p class="lead">The degree to which the result defies expectations based on rankings, records, and conventional wisdom.</p>
+                  
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-danger">0.0</h6>
+                        <p class="small mb-0">Completely expected result. Good job, your team won a game.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-warning">0.5</h6>
+                        <p class="small mb-0">The underdog won, but you're only a little surprised.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.0</h6>
+                        <p class="small mb-0">A season-defining upset. You are shocked.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.5</h6>
+                        <p class="small mb-0">Historic upset. These are the ones that average fans can recall years later.</p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="criteria2">
-                    <label class="form-check-label" for="criteria2">
-                      Application of knowledge (25 points)
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="criteria3">
-                    <label class="form-check-label" for="criteria3">
-                      Quality of work (25 points)
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="criteria4">
-                    <label class="form-check-label" for="criteria4">
-                      Timeliness (25 points)
-                    </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Game Impact Category -->
+          <div class="row mb-5">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">Game Impact</h4>
+                  <small>Range: 0.0 - 1.5</small>
+                </div>
+                <div class="card-body">
+                  <p class="lead">The significance of this game's meaning to season direction, rivalries, and recent matchup history.</p>
+                  
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-danger">0.0</h6>
+                        <p class="small mb-0">Just an average win.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-warning">0.5</h6>
+                        <p class="small mb-0">A rivalry, some postseason impact, satisfies karma,relieves recent pain.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.0</h6>
+                        <p class="small mb-0">Big rivalry, major postseason impact, rights an historical wrong.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.5</h6>
+                        <p class="small mb-0">Defines a program or an era.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary btn-lg">Submit Grade</button>
-                  <button type="button" class="btn btn-outline-secondary">Save Draft</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Game Excitement Category -->
+          <div class="row mb-5">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">Game Excitement</h4>
+                  <small>Range: 0.0 - 1.5</small>
                 </div>
-              </form>
+                <div class="card-body">
+                  <p class="lead">The game's intensity, drama, memorable momentsand back-and-forth - especially at the end of the game.</p>
+                  
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-danger">0.0</h6>
+                        <p class="small mb-0">The only drama is the storming.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-warning">0.5</h6>
+                        <p class="small mb-0">An exciting game: close throughout and not decided until late.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.0</h6>
+                        <p class="small mb-0">Decided on the final play of the game.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="border rounded p-3 h-100">
+                        <h6 class="text-success">1.5</h6>
+                        <p class="small mb-0">Decided on the final play of the game in an extraordinary way.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bottom Button -->
+          <div class="row">
+            <div class="col-12 text-center mb-5">
+              <a href="/" class="btn btn-primary btn-lg">See the Verdicts</a>
             </div>
           </div>
         </div>
