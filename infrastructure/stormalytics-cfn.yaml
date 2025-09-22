@@ -50,7 +50,7 @@ Resources:
       Description: ""
       TracingConfig:
         Mode: "PassThrough"
-      Timeout: 3
+      Timeout: 10
       RuntimeManagementConfig:
         UpdateRuntimeOn: "Auto"
       Handler: "lambda_function.lambda_handler"
@@ -80,7 +80,7 @@ Resources:
       Description: ""
       TracingConfig:
         Mode: "PassThrough"
-      Timeout: 3
+      Timeout: 10
       RuntimeManagementConfig:
         UpdateRuntimeOn: "Auto"
       Handler: "lambda_function.lambda_handler"
@@ -110,7 +110,7 @@ Resources:
       Description: ""
       TracingConfig:
         Mode: "PassThrough"
-      Timeout: 3
+      Timeout: 5
       RuntimeManagementConfig:
         UpdateRuntimeOn: "Auto"
       Handler: "lambda_function.lambda_handler"
@@ -462,7 +462,7 @@ Resources:
       HostedZoneId: !Ref HostedZoneId
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistroStorm.DomainName
-        HostedZoneId: !Ref HostedZoneId
+        HostedZoneId: "Z2FDTNDATAQYW2"
   Route53AAAARecordStorm:
     Type: "AWS::Route53::RecordSet"
     UpdateReplacePolicy: "Delete"
@@ -473,7 +473,7 @@ Resources:
       HostedZoneId: !Ref HostedZoneId
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistroStorm.DomainName
-        HostedZoneId: !Ref HostedZoneId
+        HostedZoneId: "Z2FDTNDATAQYW2"
 ############################
 #### Logs 
 ############################

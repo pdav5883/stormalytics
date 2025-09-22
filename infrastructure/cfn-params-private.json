@@ -11,7 +11,7 @@
   "LambdaGetMatchupsName=StormalyticsGetMatchups",
   "LambdaUserAuthName=StormalyticsUserAuth",
   "ApiName=stormalytics",
-  "CognitoUserPoolId=us-east-1_XXXXXXXXX",
-  "CognitoUserPoolClientId=XXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "CognitoUserPoolId=us-east-1_lzSJUtNLD",
+  "CognitoUserPoolClientId=1tq5jpqipsvpi7vrpil17feob6",
   "CognitoAdminGroupName=blr-admin"
 ]

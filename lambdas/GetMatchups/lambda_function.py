@@ -19,6 +19,13 @@ def lambda_handler(event, context):
         response = s3_client.get_object(Bucket=bucket_name, Key='matchups.json')
         content = response['Body'].read().decode('utf-8')
         
+        # Parse the JSON content
+        matchups_data = json.loads(content)
+        
+        # Sort matchups by date (most recent first)
+        if 'matchups' in matchups_data and matchups_data['matchups']:
+            matchups_data['matchups'].sort(key=lambda x: x.get('date', ''), reverse=True)
+        
         return {
             'statusCode': 200,
             'headers': {
@@ -27,7 +34,7 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Methods': 'GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
             },
-            'body': content
+            'body': json.dumps(matchups_data)
         }
         
     except ClientError as e:
