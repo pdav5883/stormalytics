@@ -1,5 +1,9 @@
+import "../styles/custom.css"
 import $ from "jquery"
+import { initNavbar } from "blr-shared-frontend"
+import { navbarConfig } from "../config/navbar-config.js"
 
-$(document).ready(function() {
-  $("#nav-placeholder").load("./assets/nav.html");
-});
+$(function() { 
+  initNavbar(navbarConfig)
+})
+

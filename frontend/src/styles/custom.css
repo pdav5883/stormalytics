@@ -1,19 +1,6 @@
 /* Storm Grader Custom Styles */
 
-/* Fixed navbar */
-.navbar.sticky-top {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 1020 !important;
-  width: 100% !important;
-}
-
 /* Add padding to body to account for fixed navbar */
-body {
-  padding-top: 80px;
-}
 
 .form-label {
   font-weight: bold;
@@ -45,19 +32,6 @@ body {
   background-color: #f8f9fa;
   border-radius: 0.375rem;
   padding: 1rem;
-}
-
-/* Navigation enhancements */
-.navbar-brand {
-  font-weight: bold;
-}
-
-.nav-link {
-  transition: color 0.15s ease-in-out;
-}
-
-.nav-link:hover {
-  color: #fff !important;
 }
 
 /* Card hover effects */
