@@ -8,10 +8,9 @@
   "PublicBucketName=stormalytics-public",
   "PrivateBucketName=stormalytics-private",
   "LambdaAddMatchupName=StormalyticsAddMatchup",
+  "LambdaEditMatchupName=StormalyticsEditMatchup",
   "LambdaGetMatchupsName=StormalyticsGetMatchups",
   "LambdaUserAuthName=StormalyticsUserAuth",
   "ApiName=stormalytics",
-  "CognitoUserPoolId=us-east-1_lzSJUtNLD",
-  "CognitoUserPoolClientId=1tq5jpqipsvpi7vrpil17feob6",
-  "CognitoAdminGroupName=blr-admin"
+  "BLRStackName=blr-home"
 ]

@@ -17,25 +17,24 @@ Parameters:
     Type: String
   LambdaAddMatchupName:
     Type: String
+  LambdaEditMatchupName:
+    Type: String
   LambdaGetMatchupsName:
     Type: String
   LambdaUserAuthName:
     Type: String
   ApiName:
     Type: String
-  CognitoUserPoolId:
-    Type: String
-  CognitoUserPoolClientId:
+  BLRStackName:
     Type: String
 Outputs:
   CloudFrontDistroId:
     Value: !Ref CloudFrontDistroStorm
   ApiId:
     Value: !Ref ApiGatewayStorm
-  UserPoolId:
-    Value: !Ref CognitoUserPoolId
-  UserPoolClientId:
-    Value: !Ref CognitoUserPoolClientId
+  BLRLambdaUserAuthArn:
+    Value: !ImportValue
+      Fn::Sub: ${BLRStackName}-LambdaUserAuthArn
 Resources:
 ############################
 ##### Lambda 
@@ -96,6 +95,36 @@ Resources:
       LoggingConfig:
         LogFormat: "Text"
         LogGroup: !Ref LogStormLambdaGetMatchups
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LambdaStormEditMatchup:
+    Type: "AWS::Lambda::Function"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !Ref LambdaEditMatchupName
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 10
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+                # upload code via lambda deploy script
+                return False
+      Role: !GetAtt RoleStormReadWrite.Arn 
+      FileSystemConfigs: []
+      Runtime: "python3.12"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: !Ref LogStormLambdaEditMatchup
       EphemeralStorage:
         Size: 512
       Architectures:
@@ -246,15 +275,12 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          Resource: !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*"
-          Action:
-          - "cognito-idp:AdminGetUser"
-          - "cognito-idp:AdminUpdateUserAttributes"
-          - "cognito-idp:AdminListGroupsForUser"
-          - "cognito-idp:ListUsers"
-          - "cognito-idp:GetUser"
+          Resource:
+          - !ImportValue
+              Fn::Sub: ${BLRStackName}-LambdaUserAuthArn
+          Action: "lambda:InvokeFunction"
           Effect: "Allow"
-          Sid: "VisualEditor0"
+          Sid: "LambdaInvokePermission"
 ############################
 #### S3
 ############################
@@ -335,6 +361,8 @@ Resources:
       ApiId: !Ref ApiGatewayStorm
       RouteKey: !Sub "POST /matchups"
       Target: !Join ["/", ["integrations", !Ref ApiIntegrationStormAddMatchup]]
+      AuthorizationType: "CUSTOM"
+      AuthorizerId: !Ref ApiAuthorizerStormUserAuth
   ApiIntegrationStormAddMatchup:
     Type: "AWS::ApiGatewayV2::Integration"
     UpdateReplacePolicy: "Delete"
@@ -380,6 +408,58 @@ Resources:
       FunctionName: !GetAtt LambdaStormGetMatchups.Arn
       Action: "lambda:InvokeFunction"
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/*/*/matchups"
+      Principal: "apigateway.amazonaws.com"
+  ApiRouteStormEditMatchup:
+    Type: "AWS::ApiGatewayV2::Route"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      RouteKey: !Sub "PATCH /matchups"
+      Target: !Join ["/", ["integrations", !Ref ApiIntegrationStormEditMatchup]]
+      AuthorizationType: "CUSTOM"
+      AuthorizerId: !Ref ApiAuthorizerStormUserAuth
+      OperationName: "EditMatchup"
+  ApiIntegrationStormEditMatchup:
+    Type: "AWS::ApiGatewayV2::Integration"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      IntegrationUri: !Sub  "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaStormEditMatchup.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+  ApiTriggerPermissionStormEditMatchup:
+    Type: "AWS::Lambda::Permission"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !GetAtt LambdaStormEditMatchup.Arn
+      Action: "lambda:InvokeFunction"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/*/*/matchups"
+      Principal: "apigateway.amazonaws.com"
+  ApiAuthorizerStormUserAuth:
+    Type: "AWS::ApiGatewayV2::Authorizer"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      Name: !Ref LambdaStormUserAuth
+      AuthorizerType: "REQUEST"
+      AuthorizerUri: !Sub  "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaStormUserAuth.Arn}/invocations"
+      AuthorizerPayloadFormatVersion: "2.0"
+      EnableSimpleResponses: true
+      IdentitySource: 
+      - "$request.header.Authorization"
+  ApiTriggerPermissionStormUserAuth:
+    Type: "AWS::Lambda::Permission"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !GetAtt LambdaStormUserAuth.Arn
+      Action: "lambda:InvokeFunction"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/authorizers/${ApiAuthorizerStormUserAuth}"
       Principal: "apigateway.amazonaws.com"
 ############################
 #### CloudFront 
@@ -490,6 +570,13 @@ Resources:
     DeletionPolicy: "Delete"
     Properties:
       LogGroupName: !Sub "/aws/lambda/${LambdaGetMatchupsName}"
+      RetentionInDays: 7
+  LogStormLambdaEditMatchup:
+    Type: "AWS::Logs::LogGroup"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaEditMatchupName}"
       RetentionInDays: 7
   LogStormLambdaUserAuth:
     Type: "AWS::Logs::LogGroup"

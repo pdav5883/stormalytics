@@ -10,7 +10,8 @@
    2. xxFinish cleaning up common layer transfer from bracket to blr-home. Rename bracket common to allow both to import
 3. Add auth to stormalytics
    1. UI login flow
-   2. Authorization on /add endpoint
+   2. Authorization on POST /matchups endpoint both in AWS and frontend
+   3. Change fetch calls to ajax calls
 4. Add comment feature
 5. Add scores, logos to matchup cards
 6. Make it clear that matchup cards are clickable
@@ -18,6 +19,7 @@
 
 ## TODO
 - Add youtube link
+- Add score
 
 A modern web application for grading and assessment, built with Bootstrap, jQuery, and Webpack.
 

@@ -12,7 +12,7 @@
        <section class="py-5 text-center container">
          <div class="row py-lg-5">
            <div class="col-lg-8 col-md-10 mx-auto">
-             <h1 class="fw-light">Add New Matchup</h1>
+             <h1 class="fw-light" id="page-title">Admin Panel</h1>
            </div>
          </div>
        </section>
@@ -20,6 +20,30 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8">
+            <!-- Mode Selection -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Action</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="mode-select" class="form-label">Mode <span class="text-danger">*</span></label>
+                    <select class="form-select" id="mode-select" name="mode">
+                      <option value="create">Create New Verdict</option>
+                      <option value="edit">Edit Existing Verdict</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3" id="matchup-selector-container" style="display: none;">
+                    <label for="matchup-select" class="form-label">Select Matchup <span class="text-danger">*</span></label>
+                    <select class="form-select" id="matchup-select" name="matchup">
+                      <option value="">Loading matchups...</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <form id="matchup-form">
               <!-- Basic Matchup Information -->
               <div class="card mb-4">
@@ -139,3 +163,4 @@
 
   </body>
 </html>
+

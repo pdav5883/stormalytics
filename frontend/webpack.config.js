@@ -28,8 +28,8 @@ module.exports = {
     navonly: {
       import: './src/scripts/navonly.js'
     },
-    new: {
-      import: './src/scripts/new.js',
+    admin: {
+      import: './src/scripts/admin.js',
       dependOn: 'shared'
     },
     shared: './src/scripts/shared.js'
@@ -65,11 +65,11 @@ module.exports = {
       chunks: ['navonly']
     }),
     new HtmlWebpack({
-      title: 'New Storm',
+      title: 'Admin Panel',
       favicon: './src/images/favicon.ico',
-      filename: 'new.html',
-      template: './src/new.html',
-      chunks: ['shared', 'new']
+      filename: 'admin.html',
+      template: './src/admin.html',
+      chunks: ['shared', 'admin']
     }),
     new HtmlWebpack({
       title: 'Stormalytics System',

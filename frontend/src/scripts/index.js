@@ -1,7 +1,7 @@
 import $ from "jquery"
 import { initNavbar, Modal } from "blr-shared-frontend"
 import { navbarConfig } from "../config/navbar-config.js"
-import { API_ENDPOINT } from "./shared.js"
+import { API_URL } from "./shared.js"
 
 // Load matchups when page loads (only on index page)
 $(function() {
@@ -131,7 +131,7 @@ let allMatchups = [];
 // Function to fetch all matchups from API
 async function fetchAllMatchups() {
   try {
-    const response = await fetch(API_ENDPOINT);
+    const response = await fetch(API_URL.matchups);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
