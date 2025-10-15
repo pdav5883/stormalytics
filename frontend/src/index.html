@@ -146,6 +146,51 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Comments Section -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingComments">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
+                        <span>Comments</span>
+                        <span class="mx-3 badge text-bg-light text-muted" id="accordion-comments-count">0</span>
+                      </button>
+                    </h2>
+                    <div id="collapseComments" class="accordion-collapse collapse" aria-labelledby="headingComments" data-bs-parent="#analysisAccordion">
+                      <div class="accordion-body">
+                        <!-- Add Comment Button (shown only when logged in) -->
+                        <div class="mb-3" id="add-comment-section">
+                          <button type="button" class="btn btn-primary btn-sm" id="add-comment-btn">
+                            Add Comment
+                          </button>
+                        </div>
+                        
+                        <!-- Comment Form (hidden by default) -->
+                        <div class="mb-3 d-none" id="comment-form-container">
+                          <div class="card">
+                            <div class="card-body">
+                              <textarea class="form-control mb-2" id="comment-text-input" rows="3" placeholder="Share your thoughts..." maxlength="500"></textarea>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                  <span id="comment-char-count">0</span>/500 characters
+                                </small>
+                                <div>
+                                  <button type="button" class="btn btn-sm btn-secondary" id="cancel-comment-btn">Cancel</button>
+                                  <button type="button" class="btn btn-sm btn-primary" id="submit-comment-btn">
+                                    <span id="submit-comment-text">Submit</span>
+                                    <span class="spinner-border spinner-border-sm ms-1 d-none" id="submit-comment-spinner"></span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- Comments List -->
+                        <div id="comments-list">
+                          <!-- Comments will be populated here -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

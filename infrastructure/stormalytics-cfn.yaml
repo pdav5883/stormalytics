@@ -23,6 +23,8 @@ Parameters:
     Type: String
   LambdaUserAuthName:
     Type: String
+  LambdaAddCommentName:
+    Type: String
   ApiName:
     Type: String
   BLRStackName:
@@ -155,6 +157,36 @@ Resources:
       LoggingConfig:
         LogFormat: "Text"
         LogGroup: !Ref LogStormLambdaUserAuth
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LambdaStormAddComment:
+    Type: "AWS::Lambda::Function"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !Ref LambdaAddCommentName
+      MemorySize: 128
+      Description: "Add comment to matchup"
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 10
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+                # upload code via lambda deploy script
+                return False
+      Role: !GetAtt RoleStormReadWrite.Arn 
+      FileSystemConfigs: []
+      Runtime: "python3.12"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: !Ref LogStormLambdaAddComment
       EphemeralStorage:
         Size: 512
       Architectures:
@@ -461,6 +493,35 @@ Resources:
       Action: "lambda:InvokeFunction"
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/authorizers/${ApiAuthorizerStormUserAuth}"
       Principal: "apigateway.amazonaws.com"
+  ApiRouteStormAddComment:
+    Type: "AWS::ApiGatewayV2::Route"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      RouteKey: "POST /comment"
+      Target: !Join ["/", ["integrations", !Ref ApiIntegrationStormAddComment]]
+      AuthorizationType: "CUSTOM"
+      AuthorizerId: !Ref ApiAuthorizerStormUserAuth
+  ApiIntegrationStormAddComment:
+    Type: "AWS::ApiGatewayV2::Integration"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      ApiId: !Ref ApiGatewayStorm
+      IntegrationType: AWS_PROXY
+      IntegrationMethod: POST
+      IntegrationUri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaStormAddComment.Arn}/invocations"
+      PayloadFormatVersion: "2.0"
+  ApiTriggerPermissionStormAddComment:
+    Type: "AWS::Lambda::Permission"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      FunctionName: !GetAtt LambdaStormAddComment.Arn
+      Action: "lambda:InvokeFunction"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayStorm}/*/*/comment"
+      Principal: "apigateway.amazonaws.com"
 ############################
 #### CloudFront 
 ############################
@@ -584,5 +645,12 @@ Resources:
     DeletionPolicy: "Delete"
     Properties:
       LogGroupName: !Sub "/aws/lambda/${LambdaUserAuthName}"
+      RetentionInDays: 7
+  LogStormLambdaAddComment:
+    Type: "AWS::Logs::LogGroup"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${LambdaAddCommentName}"
       RetentionInDays: 7
 

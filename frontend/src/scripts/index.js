@@ -1,5 +1,5 @@
 import $ from "jquery"
-import { initNavbar, Modal } from "blr-shared-frontend"
+import { initNavbar, Modal, isAuthenticated, getValidAccessToken } from "blr-shared-frontend"
 import { navbarConfig } from "../config/navbar-config.js"
 import { API_URL } from "./shared.js"
 
@@ -35,7 +35,14 @@ function createMatchupCard(matchup) {
   const loserRank = matchup.loser_rank ? `#${matchup.loser_rank}` : '';
   const year = matchup.date.split('-')[0];
   const matchupDisplay = `${winnerRank} ${matchup.winner} over ${loserRank} ${matchup.loser}`;
+  const commentCount = matchup.comments ? matchup.comments.length : 0;
   
+  // Only show comment text if there are comments
+  const commentText = commentCount > 0 ? `
+    <div class="position-absolute bottom-0 start-0 p-2">
+      <small class="text-muted">${commentCount} Comment${commentCount !== 1 ? 's' : ''}</small>
+    </div>
+  ` : '';
   
   const cardHtml = `
     <div class="col">
@@ -43,6 +50,7 @@ function createMatchupCard(matchup) {
         <div class="position-absolute bottom-0 end-0 p-2">
           <small class="text-muted">${year}</small>
         </div>
+        ${commentText}
         <div class="card-body text-center d-flex flex-column justify-content-center">
           <h5 class="card-title mb-3">${matchupDisplay}</h5>
           <div class="h3 text-dark fw-bold mb-3">${formatScore(totalScore)}</div>
@@ -197,8 +205,13 @@ async function loadMatchups(sport = 'football') {
   }
 }
 
+// Store current matchup being viewed
+let currentMatchup = null;
+
 // Function to show matchup modal
 function showMatchupModal(matchup) {
+  currentMatchup = matchup; // Store current matchup
+  
   const totalScore = calculateTotalScore(matchup);
   const verdict = determineVerdict(totalScore);
   const winnerRank = matchup.winner_rank ? `#${matchup.winner_rank}` : '';
@@ -234,7 +247,180 @@ function showMatchupModal(matchup) {
   document.getElementById('accordion-impact-score').textContent = formatScore(matchup.impact_score);
   document.getElementById('accordion-excitement-score').textContent = formatScore(matchup.excitement_score);
   
+  // Populate comments section
+  const commentCount = matchup.comments ? matchup.comments.length : 0;
+  document.getElementById('accordion-comments-count').textContent = commentCount;
+  populateComments(matchup.comments || []);
+  
+  // Show/hide add comment button based on login status
+  const addCommentSection = document.getElementById('add-comment-section');
+  if (isAuthenticated()) {
+    addCommentSection.classList.remove('d-none');
+  } else {
+    addCommentSection.classList.add('d-none');
+  }
+  
+  // Reset comment form
+  resetCommentForm();
+  
   const modalElement = document.getElementById('matchupModal');
   const modal = new Modal(modalElement);
   modal.show();
 }
+
+// Function to populate comments
+function populateComments(comments) {
+  const commentsList = document.getElementById('comments-list');
+  
+  if (comments.length === 0) {
+    commentsList.innerHTML = '<p class="text-muted text-center">No comments yet. Be the first to comment!</p>';
+    return;
+  }
+  
+  // Sort comments by date (most recent first)
+  const sortedComments = [...comments].sort((a, b) => {
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+  
+  commentsList.innerHTML = sortedComments.map(comment => {
+    const date = new Date(comment.created_at);
+    const formattedDate = date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    return `
+      <div class="card mb-2 comment-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <strong class="text-primary">${escapeHtml(comment.user_id)}</strong>
+            <small class="text-muted">${formattedDate}</small>
+          </div>
+          <p class="mb-0">${escapeHtml(comment.comment_text)}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Helper function to escape HTML
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Function to reset comment form
+function resetCommentForm() {
+  document.getElementById('comment-form-container').classList.add('d-none');
+  document.getElementById('comment-text-input').value = '';
+  document.getElementById('comment-char-count').textContent = '0';
+}
+
+// Event listener for Add Comment button
+$(document).on('click', '#add-comment-btn', function() {
+  if (!isAuthenticated()) {
+    window.location.href = '/login.html';
+    return;
+  }
+  
+  document.getElementById('comment-form-container').classList.remove('d-none');
+  document.getElementById('comment-text-input').focus();
+});
+
+// Event listener for Cancel button
+$(document).on('click', '#cancel-comment-btn', function() {
+  resetCommentForm();
+});
+
+// Event listener for character count
+$(document).on('input', '#comment-text-input', function() {
+  const length = this.value.length;
+  document.getElementById('comment-char-count').textContent = length;
+});
+
+// Event listener for Submit Comment button
+$(document).on('click', '#submit-comment-btn', async function() {
+  const commentText = document.getElementById('comment-text-input').value.trim();
+  
+  if (!commentText) {
+    alert('Please enter a comment');
+    return;
+  }
+  
+  if (!currentMatchup || !currentMatchup.id) {
+    alert('Error: No matchup selected');
+    return;
+  }
+  
+  const submitBtn = this;
+  const submitText = document.getElementById('submit-comment-text');
+  const submitSpinner = document.getElementById('submit-comment-spinner');
+  
+  try {
+    // Show loading state
+    submitBtn.disabled = true;
+    submitSpinner.classList.remove('d-none');
+    submitText.textContent = 'Submitting...';
+    
+    // Get access token
+    const accessToken = await getValidAccessToken();
+    
+    // Get user ID from user-menu button
+    const userMenuButton = document.getElementById('user-menu');
+    const userId = userMenuButton ? userMenuButton.textContent.trim() : 'Anonymous';
+
+    // Submit comment
+    const response = await fetch(API_URL.comment, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': accessToken
+      },
+      body: JSON.stringify({
+        matchup_id: currentMatchup.id,
+        comment_text: commentText,
+        user_id: userId
+      })
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      
+      // Add comment to current matchup
+      if (!currentMatchup.comments) {
+        currentMatchup.comments = [];
+      }
+      currentMatchup.comments.push(result.comment);
+      
+      // Update UI
+      populateComments(currentMatchup.comments);
+      const commentCount = currentMatchup.comments.length;
+      document.getElementById('accordion-comments-count').textContent = commentCount;
+      
+      // Reset form
+      resetCommentForm();
+      
+      // Reload matchups to get updated data
+      await fetchAllMatchups();
+      displayMatchupsBySport(getCurrentSport());
+      
+    } else if (response.status === 403) {
+      throw new Error('You must be logged in to comment');
+    } else {
+      throw new Error(`Failed to submit comment: ${response.status}`);
+    }
+    
+  } catch (error) {
+    console.error('Error submitting comment:', error);
+    alert(`Error: ${error.message}`);
+  } finally {
+    // Reset button state
+    submitBtn.disabled = false;
+    submitSpinner.classList.add('d-none');
+    submitText.textContent = 'Submit';
+  }
+});

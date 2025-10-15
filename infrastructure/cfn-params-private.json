@@ -11,6 +11,7 @@
   "LambdaEditMatchupName=StormalyticsEditMatchup",
   "LambdaGetMatchupsName=StormalyticsGetMatchups",
   "LambdaUserAuthName=StormalyticsUserAuth",
+  "LambdaAddCommentName=StormalyticsAddComment",
   "ApiName=stormalytics",
   "BLRStackName=blr-home"
 ]
