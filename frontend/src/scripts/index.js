@@ -47,6 +47,9 @@ function createMatchupCard(matchup) {
   const cardHtml = `
     <div class="col">
       <div class="card shadow-sm h-100 position-relative" data-matchup="${btoa(JSON.stringify(matchup))}" style="cursor: pointer;">
+        <div class="position-absolute top-0 end-0 p-2 d-md-none">
+          <small class="text-muted"><i class="bi bi-chevron-right"></i></small>
+        </div>
         <div class="position-absolute bottom-0 end-0 p-2">
           <small class="text-muted">${year}</small>
         </div>
@@ -179,6 +182,12 @@ function displayMatchupsBySport(sport = 'football') {
   }
 }
 
+// Function to get query parameter from URL
+function getQueryParameter(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
 // Function to load matchup data (now just filters and displays)
 async function loadMatchups(sport = 'football') {
   try {
@@ -189,6 +198,24 @@ async function loadMatchups(sport = 'football') {
     
     // Display filtered matchups
     displayMatchupsBySport(sport);
+    
+    // Check if there's a matchup ID in the query parameters
+    const matchupId = getQueryParameter('matchup');
+    if (matchupId) {
+      // Find the matchup with the specified ID
+      const matchup = allMatchups.find(m => m.id === matchupId);
+      if (matchup) {
+        // Set the sport toggle to match the matchup's sport
+        const sportRadio = document.getElementById(matchup.sport);
+        if (sportRadio) {
+          sportRadio.checked = true;
+          displayMatchupsBySport(matchup.sport);
+          updateSportText(matchup.sport);
+        }
+        // Open the modal for this matchup
+        showMatchupModal(matchup);
+      }
+    }
     
   } catch (error) {
     console.error('Error loading matchups:', error);
@@ -252,12 +279,15 @@ function showMatchupModal(matchup) {
   document.getElementById('accordion-comments-count').textContent = commentCount;
   populateComments(matchup.comments || []);
   
-  // Show/hide add comment button based on login status
+  // Show/hide add comment button and sign-in message based on login status
   const addCommentSection = document.getElementById('add-comment-section');
+  const signInMessage = document.getElementById('sign-in-message');
   if (isAuthenticated()) {
     addCommentSection.classList.remove('d-none');
+    signInMessage.classList.add('d-none');
   } else {
     addCommentSection.classList.add('d-none');
+    signInMessage.classList.remove('d-none');
   }
   
   // Reset comment form
@@ -273,7 +303,7 @@ function populateComments(comments) {
   const commentsList = document.getElementById('comments-list');
   
   if (comments.length === 0) {
-    commentsList.innerHTML = '<p class="text-muted text-center">No comments yet. Be the first to comment!</p>';
+    commentsList.innerHTML = '<p class="text-muted text-center">No comments yet. Be the first!</p>';
     return;
   }
   
@@ -320,10 +350,28 @@ function resetCommentForm() {
   document.getElementById('comment-char-count').textContent = '0';
 }
 
+// Event listener for sign-in link in comments section
+$(document).on('click', '#sign-in-link', function(e) {
+  e.preventDefault();
+  // Update URL to include matchup parameter before redirecting to sign in
+  if (currentMatchup && currentMatchup.id) {
+    const newUrl = `${window.location.pathname}?matchup=${currentMatchup.id}`;
+    window.history.replaceState(null, '', newUrl);
+  }
+  // Trigger the navbar Sign In button to use the same redirect logic
+  document.getElementById('signin-button').click();
+});
+
 // Event listener for Add Comment button
 $(document).on('click', '#add-comment-btn', function() {
   if (!isAuthenticated()) {
-    window.location.href = '/login.html';
+    // Update URL to include matchup parameter before redirecting to sign in
+    if (currentMatchup && currentMatchup.id) {
+      const newUrl = `${window.location.pathname}?matchup=${currentMatchup.id}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+    // Trigger the navbar Sign In button to use the same redirect logic
+    document.getElementById('signin-button').click();
     return;
   }
   
@@ -340,6 +388,40 @@ $(document).on('click', '#cancel-comment-btn', function() {
 $(document).on('input', '#comment-text-input', function() {
   const length = this.value.length;
   document.getElementById('comment-char-count').textContent = length;
+});
+
+// Event listener for Copy ID button
+$(document).on('click', '#copy-matchup-id-btn', async function() {
+  if (!currentMatchup || !currentMatchup.id) {
+    alert('Error: No matchup ID available');
+    return;
+  }
+  
+  try {
+    // Construct the full URL with the matchup query parameter
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    const matchupUrl = `${baseUrl}?matchup=${currentMatchup.id}`;
+    
+    // Copy to clipboard
+    await navigator.clipboard.writeText(matchupUrl);
+    
+    // Show success feedback
+    const copyText = document.getElementById('copy-id-text');
+    const copyCheck = document.getElementById('copy-id-check');
+    
+    copyText.classList.add('d-none');
+    copyCheck.classList.remove('d-none');
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      copyText.classList.remove('d-none');
+      copyCheck.classList.add('d-none');
+    }, 2000);
+    
+  } catch (error) {
+    console.error('Failed to copy URL:', error);
+    alert('Failed to copy URL to clipboard');
+  }
 });
 
 // Event listener for Submit Comment button

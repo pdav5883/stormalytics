@@ -163,6 +163,13 @@
                           </button>
                         </div>
                         
+                        <!-- Sign In Message (shown only when not logged in) -->
+                        <div class="mb-3 d-none" id="sign-in-message">
+                          <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle"></i> Please <a href="#" class="alert-link" id="sign-in-link">sign in</a> to add a comment.
+                          </div>
+                        </div>
+                        
                         <!-- Comment Form (hidden by default) -->
                         <div class="mb-3 d-none" id="comment-form-container">
                           <div class="card">
@@ -195,7 +202,11 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="copy-matchup-id-btn">
+              <span id="copy-id-text">Copy ID</span>
+              <span id="copy-id-check" class="d-none">✓ Copied!</span>
+            </button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
